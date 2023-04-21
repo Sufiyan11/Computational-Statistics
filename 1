@@ -1,0 +1,63 @@
+import numpy as np
+def Sum(a):
+    sum=0
+    for i in a:
+        sum+=i
+    return sum
+
+def Mean(a):
+    sum=Sum(a)
+    return sum/len(a)
+
+def regression_line(x,yi):
+    n=len(x)
+    sx=Sum(x)
+    sy=Sum(yi)
+    my=Mean(yi)
+    
+    xy=np.empty(n,dtype=object)
+    x2=np.empty(n,dtype=object)
+    
+    for i in range(n):
+        xy[i]=(x[i]*yi[i])
+        x2[i]=(x[i]*x[i])
+        
+    sxy=Sum(xy)
+    sx2=Sum(x2)
+    
+    m=((n*sxy)-(sx*sy))/((n*sxy)-(sx*sx))
+    c=(sy-(m*sx))/n
+    
+    y=np.empty(n,dtype=object)
+    
+    for i in range(n):
+        val=m*x[i]+c
+        y[i]=val
+        
+    sst=np.empty(n,dtype=object)
+    sse=np.empty(n,dtype=object)
+    ssr=np.empty(n,dtype=object)
+    
+    for i in range(n):
+        sst[i]=((yi[i]-my)**2)
+        sse[i]=((yi[i]-y[i])**2)
+        ssr[i]=((y[i]-my)**2)
+        
+    SST=Sum(sst)
+    SSE=Sum(sse)
+    SSR=Sum(ssr)
+    
+    R2=SSR/SST
+    
+    if(R2>0.9):
+        print("Best fit")
+    else:
+        print("Not a best fit.")
+    plt.plot(x,y)
+    plt.plot(x,yi)
+        
+x=list(map(float,input("Enter the x values :").split()))
+x=np.array(x)
+yi=list(map(float,input("Enter the y values :").split()))
+yi=np.array(yi)
+regression_line(x,yi)
