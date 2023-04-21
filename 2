@@ -1,0 +1,83 @@
+def delta(m):
+    val1=m[0][0]*((m[1][1]*m[2][2])-(m[1][2]*m[2][1]))
+    val2=m[0][1]*((m[1][0]*m[2][2])-(m[1][2]*m[2][0]))
+    val3=m[0][2]*((m[1][0]*m[2][1])-(m[1][0]*m[2][1]))
+    return val1-val2+val3
+
+def Sum(x):
+    sum=0
+    for i in range(len(x)):
+        sum+=x[i]
+    return sum
+
+def Mean(a):
+    sum=Sum(a)
+    return sum/len(a)
+
+def parabola(x,y):
+    n=len(x)
+    x2=np.empty(n,dtype=object)
+    x3=np.empty(n,dtype=object)
+    x4=np.empty(n,dtype=object)
+    xy=np.empty(n,dtype=object)
+    x2y=np.empty(n,dtype=object)
+    x3y=np.empty(n,dtype=object)
+    x4y=np.empty(n,dtype=object)
+    my=Mean(y)
+    for i in range(n):
+        x2[i]=x[i]*x[i]
+        x3[i]=x2[i]*x[i]
+        x4[i]=x3[i]*x[i]
+        xy[i]=x[i]*y[i]
+        x2y[i]=x2[i]*y[i]
+        x3y[i]=x3[i]*y[i]
+        x4y[i]=x4[i]*y[i]
+    sx=Sum(x)
+    sy=Sum(y)
+    sx2=Sum(x2)
+    sx3=Sum(x3)
+    sx4=Sum(x4)
+    sxy=Sum(xy)
+    sx2y=Sum(x2y)
+    sx3y=Sum(x3y)
+    sx4y=Sum(x4y)
+    m=np.array([[n,sx,sx2],[sx,sx2,sx3],[sx2,sx3,sx4]])
+    m1=np.array([[sy,sx,sx2],[sxy,sx2,sx3],[sx2y,sx3,sx4]])
+    m2=np.array([[n,sxy,sx2],[sx,sx2y,sx3],[sx2,sx3y,sx4]])
+    m3=np.array([[n,sx,sx2y],[sx,sx2,sx3y],[sx2,sx3,sx4y]])
+    d=delta(m)
+    d1=delta(m1)
+    d2=delta(m2)
+    d3=delta(m3)
+    a=d1/d
+    b=d2/d
+    c=d3/d
+    yi=np.empty(n,dtype=object)
+    for i in range(n):
+        yi[i]=a+(b*x[i])+(c*(x[i]**2))
+        
+    sst=np.empty(n,dtype=object)
+    sse=np.empty(n,dtype=object)
+    ssr=np.empty(n,dtype=object)
+    
+    for i in range(n):
+        sst[i]=((y[i]-my)**2)
+        sse[i]=((y[i]-yi[i])**2)
+        ssr[i]=((yi[i]-my)**2)
+        
+    SST=Sum(sst)
+    SSE=Sum(sse)
+    SSR=Sum(ssr)
+    
+    R2=SSR/SST
+    
+    if(R2>0.9):
+        print("Best fit")
+    else:
+        print("Not a best fit.")
+                
+x=list(map(float,input("Enter the x values :").split()))
+x=np.array(x)
+yi=list(map(float,input("Enter the y values :").split()))
+yi=np.array(yi)
+parabola(x,yi)
